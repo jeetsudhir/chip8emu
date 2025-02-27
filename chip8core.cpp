@@ -40,8 +40,6 @@ void Chip8::init() {
 
     // Seed random number generator
     srand(static_cast<unsigned int>(time(nullptr)));
-
-    init_audio()
 }
 
 // Load ROM into memory
@@ -255,9 +253,6 @@ void Chip8::unimplemented_opcode() const {
 // Update delay and sound timers
 void Chip8::update_timers() {
     if (delay_timer > 0) --delay_timer;
-    if (sound_timer > 0) {
-        if (--sound_timer == 0) play_sound();
-    }
 }
 
 // Wait for a keypress (blocking)
@@ -300,41 +295,5 @@ void Chip8::draw_sprite() {
         }
     }
     drawFlag = true;
-}
-
-// Initialize SDL audio
-void Chip8::init_audio() {
-    if (SDL_Init(SDL_INIT_AUDIO) < 0) {
-        std::cerr << "Failed to initialize SDL: " << SDL_GetError() << std::endl;
-        return;
-    }
-
-    if (SDL_LoadWAV("Beep 02 (1).wav", &wav_spec, &wav_buffer, &wav_length) == nullptr) {
-        std::cerr << "Failed to load WAV file: " << SDL_GetError() << std::endl;
-        SDL_Quit();
-        return;
-    }
-
-    device_id = SDL_OpenAudioDevice(nullptr, 0, &wav_spec, nullptr, 0);
-    if (device_id == 0) {
-        std::cerr << "Failed to open audio device: " << SDL_GetError() << std::endl;
-        SDL_FreeWAV(wav_buffer);
-        SDL_Quit();
-        return;
-    }
-}
-
-// Cleanup SDL audio
-void Chip8::cleanup_audio() {
-    if (device_id != 0) {
-        SDL_CloseAudioDevice(device_id);
-        SDL_FreeWAV(wav_buffer);
-        SDL_Quit();
-    }
-}
-
-// Play sound when the sound timer reaches zero
-void Chip8::play_sound() {
-
 }
 

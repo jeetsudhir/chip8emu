@@ -5,18 +5,18 @@ project(chip8Emulator)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-# Find SDL2 package
+# Search for SDL2 package
 find_package(SDL2 REQUIRED)
-# Check if SDL2 was found
+
 if (SDL2_FOUND)
     message(STATUS "SDL2 found: ${SDL2_VERSION}")
     message(STATUS "SDL2 include directories: ${SDL2_INCLUDE_DIRS}")
     message(STATUS "SDL2 libraries: ${SDL2_LIBRARIES}")
 else()
-    message(FATAL_ERROR "SDL2 not found!")
+    message(FATAL_ERROR "SDL2 not found! Please install SDL2 or set SDL2_DIR to the location of SDL2Config.cmake.")
 endif()
 
-# Include SDL2 and NFD headers explicitly
+# Include SDL2 headers
 include_directories(${SDL2_INCLUDE_DIRS})
 
 # Add the executable and source files
@@ -37,4 +37,5 @@ target_sources(chip8Emulator
 
 # Link SDL2 libraries
 target_link_libraries(chip8Emulator PRIVATE SDL2::SDL2)
+
 
